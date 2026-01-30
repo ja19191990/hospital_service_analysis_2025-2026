@@ -1,17 +1,17 @@
 # Tabla de contenidos
 
--[Introducción](#Introducción)
--[Objetivo](#Objetivo)
--[Metodología](#Metodología)
-    -[Recolección de datos](#Recolección-de-datos)
-        -[Estructura de las encuestas](#Estructura-de-las-encuestas)
-        -[Confidencialidad](#Confidencialidad)
-    -[Etapas](#Etapas)
-    -[Diseño](#Diseño)
-        -[Componentes requeridos en el dashboard](#Componentes-requeridos-en-el-dashboard)
-        -[Boceto de dashboard](#Boceto-de-dashboard)
-        -[Herramientas](#Herramientas)
-    -[Pseudocódigo](#Pseudocódigo)
+- [Introducción](#Introducción)
+- [Objetivo](#Objetivo)
+- [Metodología](#Metodología)
+    - [Recolección de datos](#Recolección-de-datos)
+        - [Estructura de las encuestas](#Estructura-de-las-encuestas)
+        - [Confidencialidad](#Confidencialidad)
+    - [Etapas](#Etapas)
+    - [Diseño](#Diseño)
+        - [Componentes requeridos en el dashboard](#Componentes-requeridos-en-el-dashboard)
+        - [Boceto de dashboard](#Boceto-de-dashboard)
+        - [Herramientas](#Herramientas)
+    - [Pseudocódigo](#Pseudocódigo)
 
 # Introducción
 
