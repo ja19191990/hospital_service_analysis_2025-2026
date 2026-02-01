@@ -11,7 +11,13 @@
         - [Componentes requeridos en el dashboard](#Componentes-requeridos-en-el-dashboard)
         - [Boceto de dashboard](#Boceto-de-dashboard)
         - [Herramientas](#Herramientas)
+- [Desarrollo](#Desarrollo) 
     - [Pseudocódigo](#Pseudocódigo)
+    - [Exploración_de_datos](#Exploración-de-datos)
+        - [EDA](#EDA)
+    - [Limpieza_de_datps](#Limpieza-de-datos)
+    - [Transformación_de_datos](#Transformación-de-datos)
+    - [Impresiones_generales](#Impresiones-generales)
 
 # Introducción
 
@@ -105,6 +111,7 @@ Algunos elementos visuales para responder apropiadamente a las preguntas del per
 | Power BI | Visualización y comunicación de resultados | Consumo de tablas y vistas exportadas.<br> Creación de relaciones entre entidades.<br> Construcción de visuales y dashboard ejecutivo. |
 | GitHub | Control de versiones y presentación del proyecto | Versionado de código y scripts SQL.<br> Organización del proyecto por capas (data/sql/scripts/notebooks).<br> Documentación del flujo de trabajo y reproducibilidad. |
 
+# Desarrollo
 
 ## Pseudocódigo
 
@@ -120,3 +127,125 @@ Algunos elementos visuales para responder apropiadamente a las preguntas del per
 8. Cargar datos en Power BI.
 9. Visualizar los datos en Power BI.
 10. Concluir con los hallazgos encontrados.
+
+## Exploración de datos
+
+Los datos fueorn incialmente explorados en Excel en donde se observó: 
+* Se trataba de un dataset de 383 filas y 71 columnas. Las primeras 4 columnas corresponden a datos generales de los pacientes encuentados, mientras que las siguientes columnas corresponden a la puntuación dada en las encuestas de expectativas o percepción del servicio médico recibido.
+* Se decidió modificar el encabezado de la columna Edad (años) a Edad.
+* Los nombres de las columnas comienzan con una letra mayúscula y el resto se escribe con minúsculas, para evitar errores por caractéres no visibles y estandarizar el formato se decidió utilizar el formato _snake case_ renombrando las columnas.
+
+### EDA
+
+* No se observaron datos nulos iniciales.
+* No se observaron filas duplicadas.
+* Se observó un error en la importación en el valor de un procedimiento al crear dos valores para el mismo procedimiento "Dictamen de Invalidez".
+
+Las relaciones entre las variables edad, escolaridad y sexo mostraron:
+- Una proporción ligeramente mayor de mujeres encuestadas en comparación a hombres encuestado
+- La edad de los pacientes encuestados va de 18 a 60 años de edad con una promedio de 38 años.
+- La escolaridad más común en mujeres es de preparotoria, sin embargo hay mayor proporción de ellas en el nivel maestría aunque sólo fueron dos casos los cuales no nos permite generalizar.
+- La escolaridad más común en hombres es de secundaria, y a nivel licenciatura se encuentran en mayor proporción que las mujeres, sin embargo también tieden a no estudiar maestría en comparación a las mujeres.
+
+
+## Limpieza de datos
+
++ Estandarización de encabezados de columnas
+``` python
+df_raw.columns = (
+    df_raw.columns
+    .str.strip()
+    .str.lower()
+    .str.replace(' ', '_')
+)
+
+# Mostrar estandarización de encabezados de columna
+print(df_raw.columns)
+
+Index(['encuesta', 'edad_(años)', 'sexo', 'escolaridad', 'procedimiento', 'e1',
+       'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'e10', 'e11', 'e12',
+       'e13', 'e14', 'e15', 'e16', 'e17', 'e18', 'e19', 'e20', 'e21', 'e22',
+       'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11',
+       'p12', 'p13', 'p14', 'p15', 'p16', 'p17', 'p18', 'p19', 'p20', 'p21',
+       'p22', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10',
+       'd11', 'd12', 'd13', 'd14', 'd15', 'd16', 'd17', 'd18', 'd19', 'd20',
+       'd21', 'd22'],
+      dtype='object')
+```
+
+
+
+* Corrección de error de importación
+
+``` python
+# Identificación de error de importación
+df_raw['procedimiento'].value_counts()
+
+procedimiento
+Calificación accidente de trabajo          204
+Dictamen Incapacidad Permanente Parcial     51
+Dictamen de Invalidez                       48
+Calificación enfermedad de trabajo          46
+Dictamen beneficiario incapacitado          25
+Dictamen de invalidez                        8
+Dictamen incapacidad Permanente Total        1
+Name: count, dtype: int64
+
+# Eliminar duplicación de valor para Dictamen de Invaidez
+df_raw['procedimiento'] = df_raw['procedimiento'].replace('Dictamen de invalidez', 'Dictamen de Invalidez')
+
+# Comprobar el cambio
+df_raw['procedimiento'].value_counts()
+
+procedimiento
+Calificación accidente de trabajo          204
+Dictamen de Invalidez                       56
+Dictamen Incapacidad Permanente Parcial     51
+Calificación enfermedad de trabajo          46
+Dictamen beneficiario incapacitado          25
+Dictamen incapacidad Permanente Total        1
+Name: count, dtype: int64
+```
+
+## Transformación de datos
+
+* Se crearon las columnas  _orden_rango_edad_ y _orden_escolaridad_ paara garantizar el orden de ejes categóricos semánticos en el dashboard.
+* Se creó la columna _rango_edad_ para agrupar pacientes según su década de vida actual.
+* Se cambio el tipo de dato de las columnas _excolaridad_ y _rango_edad_ a category.
+
+## Impresiones generales
+
+1. ¿En qué rango de edad se encuentran los pacientes encuestados?
+
+
+- El rango de edad más común de los pacientes femeninos  en orden descendente fue:
+40s > 30s > 50s > 20s > 10s
+- El rango de edad más común de los pacientes masculinos en orden descendente fue:
+30s > 40s > 20s > 50s > 10s > 60s
+
+
+![ra-distribution-by-sex](assets/images/ra_distribution_by_sex.png)
+
+2. ¿Qué procedimiento es el más solicitado por rango de edad?
+
+
+Se observó que los pacientes cuyos rangos de edad fueron 10s, 20s, 30s y 40s acudieron principalmente a procedimientos para calificar accidentes de trabajo mientas que los pacientes con rangos de edad de 50s acudieron principalmente por procedimientos de dictamenes de invalidez.
+
+
+![procedure-by-age](assets/images/procedure_by_age.png)
+
+4. ¿Qué procedimiento es el más solicitado por escolaridad?
+
+
+La calificación por accidente de trabajo para todos los niveles de escolaridad.
+
+
+![procedure-by-schooling](assets/images/procedure_by_schooling.png)
+
+6. ¿Qué procedimiento es el más solicitado por cada sexo?
+
+
+La mayoría de los pacientes encuestados acudieron por una calificación de accidente de trabajo con 204 casos, siendo la mayoría de los casos por diferencia. En orden descendente de ocurrencia los procedimientos mas frecuentes fueron: dictamen incapacidad permanente parcial, dictamen de invalidez, calificación de enfermedad de trabajo con 51, 48 y 46 casos respectivamente. Mientras que los más infrecuentes fueron dictamen de invalidez y dictamen incapacidad permanente total con 8 y 1 un casos respectivamente.
+
+
+![procedure-by-sex](assets/images/procedure_by_sex.png)
