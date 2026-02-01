@@ -234,7 +234,7 @@ Se observó que los pacientes cuyos rangos de edad fueron 10s, 20s, 30s y 40s ac
 
 ![procedure-by-age](assets/images/procedure_by_age.png)
 
-4. ¿Qué procedimiento es el más solicitado por escolaridad?
+3. ¿Qué procedimiento es el más solicitado por escolaridad?
 
 
 La calificación por accidente de trabajo para todos los niveles de escolaridad.
@@ -242,7 +242,7 @@ La calificación por accidente de trabajo para todos los niveles de escolaridad.
 
 ![procedure-by-schooling](assets/images/procedure_by_schooling.png)
 
-6. ¿Qué procedimiento es el más solicitado por cada sexo?
+4. ¿Qué procedimiento es el más solicitado por cada sexo?
 
 
 La mayoría de los pacientes encuestados acudieron por una calificación de accidente de trabajo con 204 casos, siendo la mayoría de los casos por diferencia. En orden descendente de ocurrencia los procedimientos mas frecuentes fueron: dictamen incapacidad permanente parcial, dictamen de invalidez, calificación de enfermedad de trabajo con 51, 48 y 46 casos respectivamente. Mientras que los más infrecuentes fueron dictamen de invalidez y dictamen incapacidad permanente total con 8 y 1 un casos respectivamente.
