@@ -24,7 +24,7 @@
     - [Capa analítica en PostgreSQL](#Capa-analitica-en-PostgreSQL)
     	- [Modelado de datos](#Modelado-de-datos)
 		- [Organización de scripts SQL](#Organizacion-de-scripts-SQL)
-		- [Ejecución del pipeline SQL](#Ejecucion-del-pipeline-SQL)      
+		- [Ejecución del pipeline SQL](#Ejecucion-del-pipeline-SQL)    
 
 # Introducción
 
@@ -445,11 +445,11 @@ De esta forma, la base de datos actúa como el motor analítico del proyecto.
 
 A partir de la tabla cruda df_sql (generada en el preprocesamiento), se construyó un modelo relacional compuesto por:
 
-#### Tabla _generales_
+* Tabla _generales_
 
 Información demográfica y administrativa del paciente. Los registros se relacionan 1 a 1 por paciente.
 
-##### SQL Query
+SQL Query:
 
 ``` SQL
 CREATE TABLE generales AS
@@ -468,16 +468,16 @@ ALTER TABLE generales
 ADD CONSTRAINT generales_pk PRIMARY KEY (encuesta);
 ```
 
-##### Output
+Output:
 
 ![output-tabla-generales](assets/images/output_tabla_generales.png)
 
 
-#### Table _satisfaccion_
+* Table _satisfaccion_
 
 Tabla en formato largo con las respuestas de satisfacción por pregunta. Los registros se relacionan 1 con 1 paciente y 1 pregunta.
 
-##### SQL Query
+SQL Query:
 
 ``` SQL
 DROP TABLE IF EXISTS satisfaccion;
@@ -523,7 +523,7 @@ FOREIGN KEY (encuesta)
 REFERENCES generales (encuesta);
 ```
 
-##### Output
+Output:
 
 ![output-tabla-satisfaccion](assets/images/output_tabla_satisfaccion.png)
 
@@ -534,13 +534,13 @@ Esta tabla se genera mediante:
 3. normalización para facilitar agregaciones y análisis
 
 
-#### Vistas analíticas (KPIs)
+* Vistas analíticas (KPIs)
 
 Se constryó una vista en SQL para encapsular métricas listas para consumo en BI.
 
-- vw_average_patient_per_procedure.csv
+_vw_average_patient_per_procedure.csv_
 
-##### SQL query 
+SQL query: 
 
 ``` SQL
 CREATE OR REPLACE VIEW vw_average_patient_per_procedure AS
@@ -578,16 +578,16 @@ GROUP BY
 ORDER BY g.procedimiento;
 ```
 
-##### Output
+Output:
 
 ![view-average-patient-per-procedure](assets/images/view_query_output.png)
 
 Por otra parte los KPIs de diferencias positivas/negativas con base en las expectativas y percepción de pacientes se agregaron por procedimiento. Estas funcionan como tablas analíticas listas para reporting.
 
 
-#### KPI. Mayor diferencia negativa entre percepción y expectativa.
+* KPI. Mayor diferencia negativa entre percepción y expectativa.
 
-##### SQL Query
+SQL Query:
 
 ``` SQL
 -----------------------------------------------------------------------------------------------------------------------
@@ -605,15 +605,15 @@ ORDER BY ROUND(AVG(diferencia), 3) ASC
 LIMIT 5;
 ```
 
-##### Output
+Output:
 
 ![output-kpi-negative-difference](assets/images/output_kpi_negative_difference.png)
 
 
 
-#### KPIs Mayor diferencia positiva entre percepción y expectativa.
+* KPIs Mayor diferencia positiva entre percepción y expectativa.
 
-##### SQL Query
+SQL Query:
 
 ``` SQL
 -----------------------------------------------------------------------------------------------------------------------
@@ -631,7 +631,7 @@ ORDER BY ROUND(AVG(diferencia), 3) DESC
 LIMIT 5;
 ```
 
-##### Output
+Output:
 
 ![output-kpi-positive-difference](assets/images/output_kpi_positive_difference.png)
 
@@ -663,7 +663,7 @@ Tipos de scripts:
 
 2. Quality checks: incluye validaciones automáticas de conteo de filas, conteo de columnas, tipos de datos, comprobar la ausencia de duplicados
 
-#### Estructura query para quality checks
+Estructura query para quality checks:
 
 ``` SQL
 -- Row count check
@@ -701,7 +701,7 @@ FROM (
 ) d;
 ```
 
-#### Output
+Output:
 
 ![output-for-quality-check](assets/images/output_for_quality_check.png)
 
