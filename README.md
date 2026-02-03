@@ -19,7 +19,8 @@
     - [Limpieza de datps](#Limpieza-de-datos)
     - [Transformación de datos](#Transformación-de-datos)
     - [Impresiones generales](#Impresiones-generales)
-    - [Scripts_de_automatización_en_Python](#Scripts-de-automatizacion-en-Python)
+    - [Scripts de automatización en Python](#Scripts-de-automatizacion-en-Python)
+        - [Pipeline reproducible](#Pipeline-reproducible) 
 
 # Introducción
 
@@ -233,8 +234,6 @@ Index(['encuesta', 'edad_(años)', 'sexo', 'escolaridad', 'procedimiento', 'e1',
       dtype='object')
 ```
 
-
-
 * Corrección de error de importación
 
 ``` python
@@ -313,85 +312,115 @@ La mayoría de los pacientes encuestados acudieron por una calificación de acci
 ## Scripts de automatización en Python
 
 Con el objetivo de garantizar un flujo de trabajo reproducible, modular y automatizado, el proyecto incorpora scripts de Python que conectan el procesamiento de datos con PostgreSQL y Power BI.
-
 Estos scripts permiten reconstruir toda la capa analítica desde cero sin intervención manual.
 
-* load_to_postgres.py
+1. load_to_postgres.py
 
 Carga el dataset procesado generado en los notebooks (data/processed/df_sql.csv) hacia PostgreSQL.
-
-Funciones principales:
-
-Conexión segura a la base de datos mediante variables de entorno (.env).
-
-Lectura del archivo CSV con pandas.
-
-Creación o reemplazo de la tabla base df_sql.
-
-Punto de entrada para iniciar el pipeline SQL.
-
 Flujo: CSV → PostgreSQL
 
+Funciones principales:
+- Conexión segura a la base de datos mediante variables de entorno (.env).
+- Lectura del archivo CSV con pandas.
+- Creación o reemplazo de la tabla base df_sql.
+- Punto de entrada para iniciar el pipeline SQL.
 
-* run_sql_pipeline.py
+2. run_sql_pipeline.py
 
 Ejecuta automáticamente todos los scripts SQL del proyecto en el orden correcto.
+Flujo: SQL → modelo analítico completo.
 
 Funciones principales:
+- Creación de tablas normalizadas (generales, satisfaccion).
+- Transformaciones analíticas (formato ancho → largo).
+- Construcción de vistas KPI.
+- Validaciones de calidad de datos (conteos, tipos, duplicados).
+- Ejecución secuencial y registro de resultados en consola.
 
-Creación de tablas normalizadas (generales, satisfaccion).
-
-Transformaciones analíticas (formato ancho → largo).
-
-Construcción de vistas KPI.
-
-Validaciones de calidad de datos (conteos, tipos, duplicados).
-
-Ejecución secuencial y registro de resultados en consola.
-
-Flujo: SQL → modelo analítico completo
-
-
-* export_to_csv.py
+3. export_to_csv.py
 
 Exporta las tablas y vistas finales desde PostgreSQL a archivos .csv listos para Power BI.
+Flujo: PostgreSQL → Power BI.
 
 Funciones principales:
-
-Consulta directa a tablas/vistas finales.
-
-Generación automática de archivos en data/export/.
-
-Facilita el consumo del dashboard sin conexión directa a la base de datos.
-
-Flujo: PostgreSQL → Power BI
+- Consulta directa a tablas/vistas finales.
+- Generación automática de archivos en data/export/.
+- Facilita el consumo del dashboard sin conexión directa a la base de datos.
 
 
 ### Pipeline reproducible
 
-El flujo completo se puede ejecutar en tres pasos:
+El flujo completo se puede ejecutar en tres pasos desde la consola Git Bash:
 
-1. Desde la consola bash:
-
-``` python
-python scripts/load_to_postgres.py
-```
-
-Salida esperada:
-
-
-2. Desde la consola bash:
+1. Ejecutar _load_to_postgres.py_
 
 ``` python
 python scripts/load_to_postgres.py
 ```
 
 Salida esperada:
+``` python
+Conectando a PostgreSQL...
+Archivo CSV: ...\processed\df_sql.csv
+Filas cargadas desde CSV: 383
+Tabla df_sql creada correctamente en PostgreSQL
+```
 
-4. Desde la consola bash:
+2. Ejecutar _run_sql_pipeline.py_
 
 ``` python
 python scripts/load_to_postgres.py
 ```
 
 Salida esperada:
+``` python
+Ejecutando drop_kpi_views.sql ...
+
+Ejecutando generales_create_table.sql ...
+
+Ejecutando satisfaccion_create_table.sql ...
+
+Ejecutando vw_average_patient_per_procedure.sql ...
+
+Ejecutando generales_quality_checks.sql ...
+('generales.rows_count', '383')
+('generales.columns_count', '8')
+('generales.column_typeencuesta', 'bigint')
+('generales.column_typeedad', 'bigint')
+('generales.column_typeorden_escolaridad', 'bigint')
+('generales.column_typeorden_rango_edad', 'bigint')
+('generales.column_typeprocedimiento', 'text')
+('generales.column_typerango_edad', 'text')
+('generales.column_typesexo', 'text')
+('generales.column_typeescolaridad', 'text')
+('generales.encuesta_duplicates', '0')
+
+Ejecutando satisfaccion_quality_checks.sql ...
+('satisfaccion.rows_count', '8426')
+('satisfaccion.columns_count', '5')
+('satisfaccion.column_typeencuesta', 'bigint')
+('satisfaccion.column_typepregunta', 'integer')
+('satisfaccion.column_typeexpectativa', 'bigint')
+('satisfaccion.column_typepercepcion', 'bigint')
+('satisfaccion.column_typediferencia', 'bigint')
+('satisfaccion.encuesta_duplicates', '0')
+Pipeline SQL ejecutado correctamente
+```
+
+3. Ejecutar export_to_csv.py
+
+``` python
+python scripts/load_to_postgres.py
+```
+
+Salida esperada:
+``` python
+Exportando tabla generales ...
+Archivo generado: ...\data\export\generales.csv
+Exportando tabla satisfaccion ...
+Archivo generado: ...\data\export\satisfaccion.csv
+Exportando tabla vw_average_patient_per_procedure ...
+Archivo generado: ...\data\export\vw_average_patient_per_procedure.csv
+Exportación a CSV completado
+```
+
