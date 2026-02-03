@@ -21,14 +21,27 @@
     - [Impresiones generales](#Impresiones-generales)
     - [Scripts de automatización en Python](#Scripts-de-automatizacion-en-Python)
         - [Pipeline reproducible](#Pipeline-reproducible)
-    - [Capa analítica en PostgreSQL](#Capa_analitica_en_PostgreSQL)
-    	- [Modelado de datos](#Modelado_de_datos)
-     		- [Tabla generales](#Tabla_generales)
-       			- [SQL query](#SQL_query)
+    - [Capa analítica en PostgreSQL](#Capa-analitica-en-PostgreSQL)
+    	- [Modelado de datos](#Modelado-de-datos)
+     		- [Tabla generales](#Tabla-generales)
+       			- [SQL query](#SQL-query)
           		- [Output](#Output)
-            - [Tabla_satisfaccion](#Tabla_satisfaccion)
-            	- [SQL query](#SQL_query)
-             	- [Output](#Output)     
+            - [Tabla satisfaccion](#Tabla-satisfaccion)
+            	- [SQL query](#SQL-query)
+             	- [Output](#Output)
+              - [Vista analíticas](#Vista-analiticas)
+              	- [SQL query](#SQL-query)
+               	- [Output](#Output)
+              - [KPI. Mayor diferencia negativa](#KPI-Mayor-diferencia-negativa)
+              	- [SQL query](#SQL-query)
+                - [Output](#Output)
+              - [KPI. Mayor diferencia positiva](#KPI-Mayor-diferencia-positiva)
+              	- [SQL query](#SQL-query)
+                - [Output](#Output)
+		- [Organización de scripts SQL](#Organizacion-de-scripts-SQL)
+			- [Estructura query para quality checks](#Estructura-query-para-quality-checks)
+			- [Output](#Output)
+		- [Ejecución del pipeline SQL](#Ejecucion-del-pipeline-SQL)      
 
 # Introducción
 
@@ -538,13 +551,13 @@ Esta tabla se genera mediante:
 3. normalización para facilitar agregaciones y análisis
 
 
-### Vistas analíticas (KPIs)
+#### Vistas analíticas (KPIs)
 
-Se constryó una vistas en SQL para encapsular métricas listas para consumo en BI.
+Se constryó una vista en SQL para encapsular métricas listas para consumo en BI.
 
 - vw_average_patient_per_procedure.csv
 
-#### SQL query 
+##### SQL query 
 
 ``` SQL
 CREATE OR REPLACE VIEW vw_average_patient_per_procedure AS
@@ -582,17 +595,16 @@ GROUP BY
 ORDER BY g.procedimiento;
 ```
 
-#### Output
+##### Output
 
 ![view-average-patient-per-procedure](assets/images/view_query_output.png)
 
 Por otra parte los KPIs de diferencias positivas/negativas con base en las expectativas y percepción de pacientes se agregaron por procedimiento. Estas funcionan como tablas analíticas listas para reporting.
 
 
+#### KPI. Mayor diferencia negativa entre percepción y expectativa.
 
-1. Mayor diferencia negativa entre percepción y expectativa del servicio recibido
-
-#### SQL Query
+##### SQL Query
 
 ``` SQL
 -----------------------------------------------------------------------------------------------------------------------
@@ -610,15 +622,15 @@ ORDER BY ROUND(AVG(diferencia), 3) ASC
 LIMIT 5;
 ```
 
-#### Output
+##### Output
 
 ![output-kpi-negative-difference](assets/images/output_kpi_negative_difference.png)
 
 
 
-2. Mayor diferencia positiva entre percepción y expectativa del servicio recibido
+#### KPIs Mayor diferencia positiva entre percepción y expectativa.
 
-#### SQL Query
+##### SQL Query
 
 ``` SQL
 -----------------------------------------------------------------------------------------------------------------------
@@ -636,7 +648,7 @@ ORDER BY ROUND(AVG(diferencia), 3) DESC
 LIMIT 5;
 ```
 
-#### Output
+##### Output
 
 ![output-kpi-positive-difference](assets/images/output_kpi_positive_difference.png)
 
@@ -668,7 +680,7 @@ Tipos de scripts:
 
 2. Quality checks: incluye validaciones automáticas de conteo de filas, conteo de columnas, tipos de datos, comprobar la ausencia de duplicados
 
-#### Estructura del SQL Query para quality checks
+#### Estructura query para quality checks
 
 ``` SQL
 -- Row count check
