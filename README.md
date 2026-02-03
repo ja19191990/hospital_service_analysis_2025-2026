@@ -358,12 +358,12 @@ El flujo completo se puede ejecutar en tres pasos desde la consola Git Bash:
 
 1. Ejecutar _load_to_postgres.py_
 
-``` python
+``` bash
 python scripts/load_to_postgres.py
 ```
 
 Salida esperada:
-``` python
+``` bash
 Conectando a PostgreSQL...
 Archivo CSV: ...\processed\df_sql.csv
 Filas cargadas desde CSV: 383
@@ -372,12 +372,12 @@ Tabla df_sql creada correctamente en PostgreSQL
 
 2. Ejecutar _run_sql_pipeline.py_
 
-``` python
+``` bash
 python scripts/load_to_postgres.py
 ```
 
 Salida esperada:
-``` python
+``` bash
 Ejecutando drop_kpi_views.sql ...
 
 Ejecutando generales_create_table.sql ...
@@ -413,12 +413,12 @@ Pipeline SQL ejecutado correctamente
 
 3. Ejecutar export_to_csv.py
 
-``` python
+``` bash
 python scripts/load_to_postgres.py
 ```
 
 Salida esperada:
-``` python
+``` bash
 Exportando tabla generales ...
 Archivo generado: ...\data\export\generales.csv
 Exportando tabla satisfaccion ...
@@ -713,7 +713,7 @@ Output:
 
 Todo el proceso se ejecuta automáticamente con:
 
-``` python
+``` bash
 python scripts/run_sql_pipeline.py
 ```
 
@@ -733,6 +733,107 @@ Beneficios del enfoque:
 - Lógica de negocio centralizada
 
 
-Datos listos para BI
+## Capa de visualización (Power BI)
 
-Reproducibilidad completa del proyecto
+Una vez construido el modelo analítico en PostgreSQL y generadas las métricas mediante SQL, los datos finales se integraron en Power BI para su exploración interactiva y comunicación visual.
+Power BI funciona como la capa de presentación del proyecto, permitiendo transformar resultados analíticos en información comprensible para usuarios no técnicos y tomadores de decisiones.
+
+
+### Flujo de datos hacia Power BI
+
+Para mantener la reproducibilidad y portabilidad del proyecto, se optó por exportar tablas y vistas a archivos CSV, en lugar de conectar Power BI directamente a la base de datos.
+
+```
+PostgreSQL → export_to_csv.py → data/export/*.csv → Power BI
+```
+
+Este enfoque permite:
+
+* Evitar dependencias de conexión local
+* Compartir el proyecto fácilmente en GitHub
+* Abrir el dashboard sin configurar credenciales
+* Separar analítica (SQL) de visualización (BI)
+
+### Tablas consumidas
+
+Power BI utiliza los siguientes datasets:
+
+| Archivos | Descripción |
+| --- | --- |
+| generales.csv | Información demográfica del paciente |
+| satisfaccion.csv | Respuestas por pregunta en formato largo |
+| vw_average_patient_per_procedure | KPIs agregados por procedimiento |
+
+
+### Modelo relacional en Power BI
+
+Se definieron relaciones entre entidades para habilitar análisis cruzados:
+
+```
+generales.encuesta → satisfaccion.encuesta (1:N)
+
+generales.procedimiento → vw_average_patient_per_procedure.procedimiento (1:N)
+
+```
+
+Esto permitió:
+
+* Segmentar métricas por perfil del paciente
+* Analizar satisfacción por procedimiento
+* Combinar demografía con indicadores de desempeño
+
+
+### Componentes del dashboard
+
+El informe incluye visualizaciones enfocadas en responder preguntas de las siguientes temas:
+
+* Análisis demográfico:<br>
+	¿Qué escolaridad tienen los pacientes que reciben a cada procedimiento?<br>
+	¿Qué edad tienen los pacientes reciben cada procedimiento?<br>
+  	¿Cuantos son hombres y cuantos son mujeres?<br>
+  	¿Cuantos pacientes se presentaron por procedimiento?<br>
+  	¿Cual es el procedimiento más solicitado?<br>
+  	¿Cual es el procedimiento menos solicitado?<br>
+  
+* Calidad del servicio:<br>
+	¿Es mayor la expectativa o la percepción de satisfacción del servicio recibido?<br>
+	¿Qué preguntas mostraron la mayor diferencia negativa entre percpeción y expectativa?<br>
+	¿Qué preguntas mostraron la mayor diferencia positiva entre percepción y expectativa?<br>
+	
+* Paciente regular:<br>
+	¿Cómo es el paciente típico de cada procedimiento?<br>
+
+
+🎯 Objetivo del dashboard
+
+El tablero permite:
+
+Detectar áreas de oportunidad en el servicio
+
+Identificar procedimientos con menor satisfacción
+
+Entender el perfil del paciente promedio
+
+Priorizar acciones de mejora
+
+Enfocándose en insights accionables, no sólo visualización descriptiva.
+
+✅ Buenas prácticas aplicadas
+
+Consumo de datos ya modelados (sin lógica compleja en Power BI)
+
+Modelo estrella simplificado
+
+Visualizaciones claras y comparables
+
+Métricas calculadas previamente en SQL
+
+Separación de responsabilidades (DB vs BI)
+
+📌 Resultado
+
+El dashboard final transforma datos crudos de encuestas en:
+
+Datos → Métricas → Insights → Decisiones
+
+Sirviendo como herramienta de apoyo para la evaluación de calidad del servicio médico.
