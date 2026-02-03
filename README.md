@@ -467,7 +467,7 @@ ADD CONSTRAINT generales_pk PRIMARY KEY (encuesta);
 
 #### Output
 
-
+![output-tabla-generales](assets/images/output_tabla_generales.png)
 
 
 2. Table _satisfaccion_
@@ -522,7 +522,7 @@ REFERENCES generales (encuesta);
 
 #### Output
 
-
+![output-tabla-satisfaccion](assets/images/output_tabla_satisfaccion.png)
 
 Esta tabla se genera mediante:
 
@@ -577,7 +577,7 @@ ORDER BY g.procedimiento;
 
 #### Output
 
-
+![view-average-patient-per-procedure](assets/images/view_query_output.png)
 
 Por otra parte los KPIs de diferencias positivas/negativas con base en las expectativas y percepción de pacientes se agregaron por procedimiento. Estas funcionan como tablas analíticas listas para reporting.
 
@@ -603,6 +603,7 @@ LIMIT 5;
 
 #### Output
 
+![output-kpi-negative-difference](assets/images/output_kpi_negative_difference.png)
 
 #### SQL Query
 
@@ -626,6 +627,7 @@ LIMIT 5;
 
 #### Output
 
+![output-kpi-positive-difference](assets/images/output_kpi_positive_difference.png)
 
 ### Organización de scripts SQL
 
@@ -655,6 +657,7 @@ tipos de datos
 duplicados
 
 #### Estructura del SQL Query para quality checks
+
 ``` SQL
 -- Row count check
 SELECT
@@ -693,6 +696,7 @@ FROM (
 
 #### Output
 
+![output-for-quality-check](assets/images/output_for_quality_check.png)
 
 
 3. Analytics (KPIs)
