@@ -737,7 +737,11 @@ Beneficios del enfoque:
 
 Una vez construido el modelo analítico en PostgreSQL y generadas las métricas mediante SQL, los datos finales se integraron en Power BI para su exploración interactiva y comunicación visual.
 Power BI funciona como la capa de presentación del proyecto, permitiendo transformar resultados analíticos en información comprensible para usuarios no técnicos y tomadores de decisiones.
+En esta capa se consumieron de datos ya modelados (sin lógica compleja en Power BI) permitiendo obtener:
 
+* Visualizaciones claras y comparables
+* Métricas calculadas previamente en SQL
+* Separación de responsabilidades (DB vs BI)
 
 ### Flujo de datos hacia Power BI
 
@@ -788,52 +792,38 @@ Esto permitió:
 El informe incluye visualizaciones enfocadas en responder preguntas de las siguientes temas:
 
 * Análisis demográfico:<br>
+
 	¿Qué escolaridad tienen los pacientes que reciben a cada procedimiento?<br>
 	¿Qué edad tienen los pacientes reciben cada procedimiento?<br>
-  	¿Cuantos son hombres y cuantos son mujeres?<br>
-  	¿Cuantos pacientes se presentaron por procedimiento?<br>
-  	¿Cual es el procedimiento más solicitado?<br>
+	¿Cual es el procedimiento más solicitado?<br>
   	¿Cual es el procedimiento menos solicitado?<br>
+	¿Cuantos pacientes se presentaron por procedimiento?<br>
+	
+	![schooling-per-procedure](assets/images/schooling_per_procedure.gif)
+	
+  	¿Cuaantas son mujeres?<br>
+	
+	![women-per-procedure](assets/images/women_per_procedure.gif)
+
+	¿Cuantos son hombres?<br>
+	
+	![men-per-procedure](assets/images/men_per_procedure.gif)
   
 * Calidad del servicio:<br>
+
 	¿Es mayor la expectativa o la percepción de satisfacción del servicio recibido?<br>
 	¿Qué preguntas mostraron la mayor diferencia negativa entre percpeción y expectativa?<br>
 	¿Qué preguntas mostraron la mayor diferencia positiva entre percepción y expectativa?<br>
+
+	![metrics-by-procedure](assets/images/metrics_by_procedure.gif)
+
+	¿Cómo cambia la expectativa y percepción de cada procedimiento recibido según el sexo del paciente?
+
+	![metrics-by-sex](assets/images/metrics_by_sex.gif)
 	
 * Paciente regular:<br>
+
 	¿Cómo es el paciente típico de cada procedimiento?<br>
+	
+	![typical-patient-by-procedure](assets/images/typical_patient_by_procedure.gif)
 
-
-🎯 Objetivo del dashboard
-
-El tablero permite:
-
-Detectar áreas de oportunidad en el servicio
-
-Identificar procedimientos con menor satisfacción
-
-Entender el perfil del paciente promedio
-
-Priorizar acciones de mejora
-
-Enfocándose en insights accionables, no sólo visualización descriptiva.
-
-✅ Buenas prácticas aplicadas
-
-Consumo de datos ya modelados (sin lógica compleja en Power BI)
-
-Modelo estrella simplificado
-
-Visualizaciones claras y comparables
-
-Métricas calculadas previamente en SQL
-
-Separación de responsabilidades (DB vs BI)
-
-📌 Resultado
-
-El dashboard final transforma datos crudos de encuestas en:
-
-Datos → Métricas → Insights → Decisiones
-
-Sirviendo como herramienta de apoyo para la evaluación de calidad del servicio médico.
