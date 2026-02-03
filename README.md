@@ -442,7 +442,7 @@ De esta forma, la base de datos actúa como el motor analítico del proyecto.
 
 A partir de la tabla cruda df_sql (generada en el preprocesamiento), se construyó un modelo relacional compuesto por:
 
-1. generales
+1. Tabla _generales_
 
 Información demográfica y administrativa del paciente. Los registros se relacionan 1 a 1 por paciente.
 
@@ -470,7 +470,7 @@ ADD CONSTRAINT generales_pk PRIMARY KEY (encuesta);
 
 
 
-2. satisfaccion
+2. Table _satisfaccion_
 
 Tabla en formato largo con las respuestas de satisfacción por pregunta. Los registros se relacionan 1 con 1 paciente y 1 pregunta.
 
