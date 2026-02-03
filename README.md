@@ -20,7 +20,8 @@
     - [Transformación de datos](#Transformación-de-datos)
     - [Impresiones generales](#Impresiones-generales)
     - [Scripts de automatización en Python](#Scripts-de-automatizacion-en-Python)
-        - [Pipeline reproducible](#Pipeline-reproducible) 
+        - [Pipeline reproducible](#Pipeline-reproducible)
+    - [Capa analítica en PostgreSQL](#Capa_analitica_en_PostgreSQL) 
 
 # Introducción
 
@@ -424,3 +425,303 @@ Archivo generado: ...\data\export\vw_average_patient_per_procedure.csv
 Exportación a CSV completado
 ```
 
+## Capa analítica en PostgreSQL
+
+Con el objetivo de separar el procesamiento exploratorio del modelado analítico, se implementó una base de datos PostgreSQL como capa intermedia entre Python y Power BI.
+
+Esta capa permite:
+- Normalizar los datos
+- Estandarizar métricas
+- Centralizar reglas de negocio
+- Ejecutar consultas analíticas de forma eficiente
+- Garantizar reproducibilidad del modelo
+
+De esta forma, la base de datos actúa como el motor analítico del proyecto.
+
+### Modelo de datos
+
+A partir de la tabla cruda df_sql (generada en el preprocesamiento), se construyó un modelo relacional compuesto por:
+
+1. generales
+
+Información demográfica y administrativa del paciente. Los registros se relacionan 1 a 1 por paciente.
+
+#### SQL Query
+
+``` SQL
+CREATE TABLE generales AS
+SELECT
+    encuesta,
+    edad,
+    sexo,
+    escolaridad,
+    procedimiento,
+    rango_edad,
+    orden_escolaridad,
+    orden_rango_edad
+FROM df_sql;
+
+ALTER TABLE generales
+ADD CONSTRAINT generales_pk PRIMARY KEY (encuesta);
+```
+
+#### Output
+
+
+
+
+2. satisfaccion
+
+Tabla en formato largo con las respuestas de satisfacción por pregunta. Los registros se relacionan 1 con 1 paciente y 1 pregunta.
+
+#### SQL Query
+
+``` SQL
+DROP TABLE IF EXISTS satisfaccion;
+CREATE TABLE satisfaccion AS
+SELECT
+    d.encuesta,
+	x.pregunta,
+	x.expectativa,
+	x.percepcion,
+	x.diferencia
+FROM df_sql d
+CROSS JOIN LATERAL(
+    VALUES
+	    (1, d.e1, d.p1, d.d1),
+		(2, d.e2, d.p2, d.d2),
+		(3, d.e3, d.p3, d.d3),
+		(4, d.e4, d.p4, d.d4),
+		(5, d.e5, d.p5, d.d5),
+		(6, d.e6, d.p6, d.d6),
+		(7, d.e7, d.p7, d.d7),
+		(8, d.e8, d.p8, d.d8),
+		(9, d.e9, d.p9, d.d9),
+		(10, d.e10, d.p10, d.d10),
+		(11, d.e11, d.p11, d.d11),
+		(12, d.e12, d.p12, d.d12),
+		(13, d.e13, d.p13, d.d13),
+		(14, d.e14, d.p14, d.d14),
+		(15, d.e15, d.p15, d.d15),
+		(16, d.e16, d.p16, d.d16),
+		(17, d.e17, d.p17, d.d17),
+		(18, d.e18, d.p18, d.d18),
+		(19, d.e19, d.p19, d.d19),
+		(20, d.e20, d.p20, d.d20),
+		(21, d.e21, d.p21, d.d21),
+		(22, d.e22, d.p22, d.d22)
+) AS x(pregunta, expectativa, percepcion, diferencia);
+
+-- Add foreign key on 'encuesta'
+
+ALTER TABLE satisfaccion 
+ADD CONSTRAINT fk_satisfaccion_generales
+FOREIGN KEY (encuesta)
+REFERENCES generales (encuesta);
+```
+
+#### Output
+
+
+
+Esta tabla se genera mediante:
+
+1. transformación wide → long (formato ancho → formato largo)
+2. uso de CROSS JOIN LATERAL
+3. normalización para facilitar agregaciones y análisis
+
+
+### Vistas analíticas (KPIs)
+
+Se constryó una vistas en SQL para encapsular métricas listas para consumo en BI.
+
+- vw_average_patient_per_procedure.csv
+
+#### SQL query 
+
+``` SQL
+CREATE OR REPLACE VIEW vw_average_patient_per_procedure AS
+WITH caracteristica_comun AS (
+    SELECT
+        procedimiento,
+        escolaridad,
+        sexo,
+        COUNT(*) AS freq,
+        ROW_NUMBER() OVER (
+            PARTITION BY procedimiento
+            ORDER BY COUNT(*) DESC
+        ) AS rn
+    FROM generales
+    GROUP BY procedimiento, escolaridad, sexo
+)
+SELECT
+    g.procedimiento,
+    ROUND(AVG(g.edad), 0) AS average_age,
+    cm.escolaridad AS main_education,
+    cm.sexo AS main_sex,
+    ROUND(AVG(s.expectativa), 3) AS average_expectative,
+    ROUND(AVG(s.percepcion), 3) AS average_perception,
+    ROUND(AVG(s.diferencia), 3) AS average_difference
+FROM generales g
+JOIN satisfaccion s
+    ON g.encuesta = s.encuesta
+JOIN caracteristica_comun cm
+    ON g.procedimiento = cm.procedimiento
+   AND cm.rn = 1
+GROUP BY
+    g.procedimiento,
+    cm.escolaridad,
+    cm.sexo
+ORDER BY g.procedimiento;
+```
+
+#### Output
+
+
+
+Por otra parte los KPIs de diferencias positivas/negativas con base en las expectativas y percepción de pacientes se agregaron por procedimiento. Estas funcionan como tablas analíticas listas para reporting.
+
+#### SQL Query
+
+1. Mayor diferencia negativa entre percepción y expectativa del servicio recibido
+
+``` SQL
+-----------------------------------------------------------------------------------------------------------------------
+-- KPI Which 5 questions had the largest average postive difference?
+-- KPI ¿Cúales 5 preguntas tuvieron la mayor diferencia positiva promedio?
+-----------------------------------------------------------------------------------------------------------------------
+
+SELECT
+    pregunta,
+    ROUND(AVG(diferencia), 3) AS average_difference
+FROM satisfaccion
+WHERE diferencia < 0
+GROUP BY pregunta
+ORDER BY ROUND(AVG(diferencia), 3) ASC
+LIMIT 5;
+```
+
+#### Output
+
+
+#### SQL Query
+
+2. Mayor diferencia positiva entre percepción y expectativa del servicio recibido
+
+``` SQL
+-----------------------------------------------------------------------------------------------------------------------
+-- KPI Which 5 questions had the largest average postive difference?
+-- KPI ¿Cúales 5 preguntas tuvieron la mayor diferencia positiva promedio?
+-----------------------------------------------------------------------------------------------------------------------
+
+SELECT
+    pregunta,
+    ROUND(AVG(diferencia), 3) AS average_difference
+FROM satisfaccion
+WHERE diferencia >= 1
+GROUP BY pregunta
+ORDER BY ROUND(AVG(diferencia), 3) DESC
+LIMIT 5;
+```
+
+#### Output
+
+
+### Organización de scripts SQL
+
+Los scripts se organizaron por responsabilidades siguiendo buenas prácticas:
+
+sql/
+│
+├── ddl/        → creación de tablas y vistas
+├── quality/    → validaciones de calidad de datos
+└── analytics/  → KPIs y consultas analíticas
+
+Tipos de scripts:
+
+1. DDL
+Definen la estructura del modelo:
+
+CREATE TABLE
+CREATE VIEW
+PRIMARY / FOREIGN KEYS
+
+2. Quality checks
+Validaciones automáticas:
+
+conteo de filas
+conteo de columnas
+tipos de datos
+duplicados
+
+#### Estructura del SQL Query para quality checks
+``` SQL
+-- Row count check
+SELECT
+    'generales.rows_count' AS check_name,
+    CAST(COUNT(*) AS TEXT) AS check_value
+FROM generales
+UNION ALL
+-- Column count check
+SELECT
+    'generales.columns_count' AS check_name,
+    CAST(COUNT (*) AS TEXT) AS check_value
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE
+    TABLE_NAME = 'generales'
+UNION ALL
+-- Data type check
+SELECT
+    'generales.column_type' || COLUMN_NAME AS check_name,
+	CAST(DATA_TYPE AS TEXT) AS check_value
+FROM
+    INFORMATION_SCHEMA.COLUMNS
+WHERE
+ TABLE_NAME = 'generales'
+ UNION ALL
+-- Check for duplicates
+SELECT
+    'generales.encuesta_duplicates' AS check_name,
+	CAST(COUNT(*) AS TEXT) AS check_value
+FROM (
+    SELECT encuesta
+    FROM generales
+    GROUP BY encuesta
+    HAVING COUNT(*) > 1
+) d;
+```
+
+#### Output
+
+
+
+3. Analytics (KPIs)
+Consultas agregadas para métricas de negocio.
+
+### Ejecución del pipeline SQL
+
+Todo el proceso se ejecuta automáticamente con:
+
+``` python
+python scripts/run_sql_pipeline.py
+```
+
+Este script:
+
+- Crea tablas normalizadas
+- Aplica transformaciones
+- Construye vistas KPI
+- Ejecuta controles de calidad
+- Muestra resultados directamente en consola.
+
+Beneficios del enfoque:
+
+- Separación clara entre EDA y analítica
+- Mayor rendimiento en consultas agregadas
+- Modelo escalable
+- Lógica de negocio centralizada
+
+
+Datos listos para BI
+
+Reproducibilidad completa del proyecto
