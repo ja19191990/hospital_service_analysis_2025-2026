@@ -21,7 +21,14 @@
     - [Impresiones generales](#Impresiones-generales)
     - [Scripts de automatización en Python](#Scripts-de-automatizacion-en-Python)
         - [Pipeline reproducible](#Pipeline-reproducible)
-    - [Capa analítica en PostgreSQL](#Capa_analitica_en_PostgreSQL) 
+    - [Capa analítica en PostgreSQL](#Capa_analitica_en_PostgreSQL)
+    	- [Modelado de datos](#Modelado_de_datos)
+     		- [Tabla generales](#Tabla_generales)
+       			- [SQL query](#SQL_query)
+          		- [Output](#Output)
+            - [Tabla_satisfaccion](#Tabla_satisfaccion)
+            	- [SQL query](#SQL_query)
+             	- [Output](#Output)     
 
 # Introducción
 
@@ -442,11 +449,11 @@ De esta forma, la base de datos actúa como el motor analítico del proyecto.
 
 A partir de la tabla cruda df_sql (generada en el preprocesamiento), se construyó un modelo relacional compuesto por:
 
-1. Tabla _generales_
+#### Tabla _generales_
 
 Información demográfica y administrativa del paciente. Los registros se relacionan 1 a 1 por paciente.
 
-#### SQL Query
+##### SQL Query
 
 ``` SQL
 CREATE TABLE generales AS
@@ -465,16 +472,16 @@ ALTER TABLE generales
 ADD CONSTRAINT generales_pk PRIMARY KEY (encuesta);
 ```
 
-#### Output
+##### Output
 
 ![output-tabla-generales](assets/images/output_tabla_generales.png)
 
 
-2. Table _satisfaccion_
+#### Table _satisfaccion_
 
 Tabla en formato largo con las respuestas de satisfacción por pregunta. Los registros se relacionan 1 con 1 paciente y 1 pregunta.
 
-#### SQL Query
+##### SQL Query
 
 ``` SQL
 DROP TABLE IF EXISTS satisfaccion;
@@ -520,7 +527,7 @@ FOREIGN KEY (encuesta)
 REFERENCES generales (encuesta);
 ```
 
-#### Output
+##### Output
 
 ![output-tabla-satisfaccion](assets/images/output_tabla_satisfaccion.png)
 
@@ -581,9 +588,11 @@ ORDER BY g.procedimiento;
 
 Por otra parte los KPIs de diferencias positivas/negativas con base en las expectativas y percepción de pacientes se agregaron por procedimiento. Estas funcionan como tablas analíticas listas para reporting.
 
-#### SQL Query
+
 
 1. Mayor diferencia negativa entre percepción y expectativa del servicio recibido
+
+#### SQL Query
 
 ``` SQL
 -----------------------------------------------------------------------------------------------------------------------
@@ -605,9 +614,11 @@ LIMIT 5;
 
 ![output-kpi-negative-difference](assets/images/output_kpi_negative_difference.png)
 
-#### SQL Query
+
 
 2. Mayor diferencia positiva entre percepción y expectativa del servicio recibido
+
+#### SQL Query
 
 ``` SQL
 -----------------------------------------------------------------------------------------------------------------------
@@ -633,28 +644,29 @@ LIMIT 5;
 
 Los scripts se organizaron por responsabilidades siguiendo buenas prácticas:
 
+```
 sql/
 │
-├── ddl/        → creación de tablas y vistas
-├── quality/    → validaciones de calidad de datos
-└── analytics/  → KPIs y consultas analíticas
+├── ddl/
+│   ├── generales_create_table.sql
+│   ├── satisfaccion_create_table.sql
+│   └── vw_average_patient_per_procedure.sql
+│
+├── quality/
+│   ├── generales_quality_checks.sql
+│   └── satisfaccion_quality_checks.sql
+│
+└── analytics/
+    ├── kpi_largest_positive_difference.sql
+    └── kpi_largest_negative_difference.sql
+```
+
 
 Tipos de scripts:
 
-1. DDL
-Definen la estructura del modelo:
+1. DDL: definen la estructura del modelo: CREATE TABLE / CREATE VIEW / PRIMARY KEY / FOREIGN KEYS
 
-CREATE TABLE
-CREATE VIEW
-PRIMARY / FOREIGN KEYS
-
-2. Quality checks
-Validaciones automáticas:
-
-conteo de filas
-conteo de columnas
-tipos de datos
-duplicados
+2. Quality checks: incluye validaciones automáticas de conteo de filas, conteo de columnas, tipos de datos, comprobar la ausencia de duplicados
 
 #### Estructura del SQL Query para quality checks
 
@@ -699,8 +711,8 @@ FROM (
 ![output-for-quality-check](assets/images/output_for_quality_check.png)
 
 
-3. Analytics (KPIs)
-Consultas agregadas para métricas de negocio.
+3. Analytics (KPIs) : incluye las consultas agregadas para métricas de negocio.
+
 
 ### Ejecución del pipeline SQL
 
