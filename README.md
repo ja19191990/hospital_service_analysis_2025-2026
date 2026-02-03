@@ -19,6 +19,7 @@
     - [Limpieza de datps](#Limpieza-de-datos)
     - [Transformación de datos](#Transformación-de-datos)
     - [Impresiones generales](#Impresiones-generales)
+    - [Scripts_de_automatización_en_Python](#Scripts-de-automatizacion-en-Python)
 
 # Introducción
 
@@ -308,3 +309,89 @@ La mayoría de los pacientes encuestados acudieron por una calificación de acci
 
 
 ![procedure-by-sex](assets/images/procedure_by_sex.png)
+
+## Scripts de automatización en Python
+
+Con el objetivo de garantizar un flujo de trabajo reproducible, modular y automatizado, el proyecto incorpora scripts de Python que conectan el procesamiento de datos con PostgreSQL y Power BI.
+
+Estos scripts permiten reconstruir toda la capa analítica desde cero sin intervención manual.
+
+* load_to_postgres.py
+
+Carga el dataset procesado generado en los notebooks (data/processed/df_sql.csv) hacia PostgreSQL.
+
+Funciones principales:
+
+Conexión segura a la base de datos mediante variables de entorno (.env).
+
+Lectura del archivo CSV con pandas.
+
+Creación o reemplazo de la tabla base df_sql.
+
+Punto de entrada para iniciar el pipeline SQL.
+
+Flujo: CSV → PostgreSQL
+
+
+* run_sql_pipeline.py
+
+Ejecuta automáticamente todos los scripts SQL del proyecto en el orden correcto.
+
+Funciones principales:
+
+Creación de tablas normalizadas (generales, satisfaccion).
+
+Transformaciones analíticas (formato ancho → largo).
+
+Construcción de vistas KPI.
+
+Validaciones de calidad de datos (conteos, tipos, duplicados).
+
+Ejecución secuencial y registro de resultados en consola.
+
+Flujo: SQL → modelo analítico completo
+
+
+* export_to_csv.py
+
+Exporta las tablas y vistas finales desde PostgreSQL a archivos .csv listos para Power BI.
+
+Funciones principales:
+
+Consulta directa a tablas/vistas finales.
+
+Generación automática de archivos en data/export/.
+
+Facilita el consumo del dashboard sin conexión directa a la base de datos.
+
+Flujo: PostgreSQL → Power BI
+
+
+### Pipeline reproducible
+
+El flujo completo se puede ejecutar en tres pasos:
+
+1. Desde la consola bash:
+
+``` python
+python scripts/load_to_postgres.py
+```
+
+Salida esperada:
+
+
+2. Desde la consola bash:
+
+``` python
+python scripts/load_to_postgres.py
+```
+
+Salida esperada:
+
+4. Desde la consola bash:
+
+``` python
+python scripts/load_to_postgres.py
+```
+
+Salida esperada:
