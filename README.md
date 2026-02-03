@@ -19,12 +19,12 @@
     - [Limpieza de datps](#Limpieza-de-datos)
     - [Transformación de datos](#Transformación-de-datos)
     - [Impresiones generales](#Impresiones-generales)
-    - [Scripts de automatización en Python](#Scripts-de-automatizacion-en-Python)
+    - [Scripts de automatización  en Python](#Scripts-de-automatización-en-Python)
         - [Pipeline reproducible](#Pipeline-reproducible)
-    - [Capa analítica en PostgreSQL](#Capa-analitica-en-PostgreSQL)
+    - [Capa analítica en PostgreSQL](#Capa-analítica-en-PostgreSQL)
     	- [Modelado de datos](#Modelado-de-datos)
-		- [Organización de scripts SQL](#Organizacion-de-scripts-SQL)
-		- [Ejecución del pipeline SQL](#Ejecucion-del-pipeline-SQL)    
+    	- [Organización de scripts SQL](#Organización-de-scripts-SQL)
+    	- [Ejecución del pipeline SQL](#Ejecución-del-pipeline-SQL)    
 
 # Introducción
 
