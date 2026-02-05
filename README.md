@@ -836,3 +836,14 @@ El informe incluye visualizaciones enfocadas en responder preguntas de las sigui
 
 # Análisis
 
+## Datos demógraficos
+
+| Procedimiento | Pacientes | Masculinos | Femeninos |
+| --- | --- | --- | --- |
+| Calificación accidente de trabajo | 204 | 89 | 115 |
+| Calificación enfermedad de trabajo | 46 | 28 | 18 |
+| Dictamen beneficiario incapacitado | 25 | 3 | 22 |
+| Dictamen de Invalidez | 56 | 28 | 28 |
+| Dictamen incapacidad Permanente Parcial | 51 | 34 | 17 |
+| Dictamen incapacidad Permanente Total | 1 | 1 | 0 | 
+| Total | 383 | 183 | 200 |
