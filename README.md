@@ -24,7 +24,13 @@
     - [Capa analítica en PostgreSQL](#Capa-analítica-en-PostgreSQL)
     	- [Modelado de datos](#Modelado-de-datos)
     	- [Organización de scripts SQL](#Organización-de-scripts-SQL)
-    	- [Ejecución del pipeline SQL](#Ejecución-del-pipeline-SQL)    
+    	- [Ejecución del pipeline SQL](#Ejecución-del-pipeline-SQL)
+     - [Capa de visualización en Power BI](#Capa-de-visualización-en-Power-BI)
+     	- [Flujo de datos hacie Power BI](#Flujo-de-datos-hacia-Power-BI)
+      	- [Tablas consumidas](#Tablas-consumidas)
+       	- [Modelo relacional en Power BI](#Modelo-relacional-en-Power-BI)
+       	- [Componentes del dashboard](#Componentes-del-dashboard)
+- [Análisis](#Análisis)     
 
 # Introducción
 
@@ -733,7 +739,7 @@ Beneficios del enfoque:
 - Lógica de negocio centralizada
 
 
-## Capa de visualización (Power BI)
+## Capa de visualización en Power BI
 
 Una vez construido el modelo analítico en PostgreSQL y generadas las métricas mediante SQL, los datos finales se integraron en Power BI para su exploración interactiva y comunicación visual.
 Power BI funciona como la capa de presentación del proyecto, permitiendo transformar resultados analíticos en información comprensible para usuarios no técnicos y tomadores de decisiones.
@@ -826,4 +832,7 @@ El informe incluye visualizaciones enfocadas en responder preguntas de las sigui
 	¿Cómo es el paciente típico de cada procedimiento?<br>
 	
 	![typical-patient-by-procedure](assets/images/typical_patient_by_procedure.gif)
+
+
+# Análisis
 
