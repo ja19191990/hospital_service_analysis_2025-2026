@@ -838,12 +838,48 @@ El informe incluye visualizaciones enfocadas en responder preguntas de las sigui
 
 ## Datos demógraficos
 
-| Procedimiento | Pacientes | Masculinos | Femeninos |
-| --- | --- | --- | --- |
-| Calificación accidente de trabajo | 204 | 89 | 115 |
-| Calificación enfermedad de trabajo | 46 | 28 | 18 |
-| Dictamen beneficiario incapacitado | 25 | 3 | 22 |
-| Dictamen de Invalidez | 56 | 28 | 28 |
-| Dictamen incapacidad Permanente Parcial | 51 | 34 | 17 |
-| Dictamen incapacidad Permanente Total | 1 | 1 | 0 | 
-| Total | 383 | 183 | 200 |
+![output-kpi-porcentage-count](assets/images/output_kpi_porcentage_count.png)
+
+Se observó que:
+* La distribución de pacientes por procedimiento es muy desigual, siendo el procedimiento _Calificación accidente de trabajo_ el más solicitado con diferencia entre los encuestados abarcando más de la mitad de los casos totales de encuestados. Por otra parte el _Dictamen por incapacidad Permanente Total_ fue el menos solicitado con sólo un caso entre los encuestados.
+* La distribución entre hombres y mujeres por procedimiento fue muy variada encontrado que procedimientos como _Calificacción accidente de trabajo_ y _Dictamen de invalidez_ en los cuales la proporción fue equilibrada registrando distribuciones para cada sexo en el rango entre 40% - 60%. Sin embargo para el resto de procedimientos las proporciones entre ambos sexos fue marcadamente más desigual.
+
+
+![output-kpi-ra-by-procedure](assets/images/output_kpi_ra_by_procedure.png)
+
+En cuanto a la distribución por rango de edad de los pacientes esta también cambia en función del procedimiento solicitado:
+* Para la _Calificación accidente de trabajo_ la mayoría de los pacientes se encuentran entre la década de los 30s o 40s.
+* El _Dictamen de Invalidez_ fue más solicitado por los pacientes en la década de los 50s.
+* El _Dictamen de beneficiario incapacitado_ y _Dictamen de incapacidad Permanente Parcial_ fueron más solicitado durante la etapa de los 40s.
+* El único procedimiento registrado para _Dictamen incapacidad Permanente Total_ fue solicitado por un paciente en los 30s.
+
+
+## Datos de percepción y expectativa
+
+Las 22 pregruntas realizadas en las encuestas no fueron revelados para proteger los datos personales de los pacientes encuestados.
+
+¿Cuáles fueron las 5 preguntas que presentaron la mayor diferencia positiva sin importar el procedimiento?
+
+![output-kpi-positive_difference](assets/images/output_kpi_positive_difference.png)
+
+En orden descendente de valor de diferencia se obtuvieron las preguntas 9 > 15 > 7 > 22 > 8. Lo anterior indicó que los puntos evaluados por estas preguntas son las mayores fortalezas del servicio actual médico actual, debido a que si la diferencia es positiva indica la percepción fue mayor a la expectativa, lo cual se puede traducir como satisfacción en la atención recibida.
+En general se puede observar que las diferencias positivas oscilaron entre 1.71 - 1.53 indicando una pequeña diferencia entre el valor de la percepción y expectativa, por lo que aunque con los resultados actuales la evaluación de dichas preguntas haya sido favorable esta podría cambiar con facilidad en un futuro próximo.
+
+¿Cuáles fueron las 5 preguntas que presentaron la mayor diferencia negativa sin importar el procedimiento?
+
+![output-kpi-negative_difference](assets/images/output_kpi_negative_difference.png)
+
+En orden ascendente de diferencia obtenida las preguntas fueron: 2 > 22 > 9 > 8 > 7. Las preguntas anteriores indican los puntos de mejora más relevantes a tratar para el servicio médico de medicina en el trabajo ya que un valor de diferencia negativa promedio indica una mayor valor de expectativa con respecto a la percepción del servicio médico recibido. Las diferencias se encontraron en el intervalo de -1.82 - -1.73 mostrando un intervalo ligeramente mayor con respecto al caso de las preguntas con diferencia positiva, lo cual señala una respuesta general de los pacientes que se inclina al pesimismo en el servicio recibido. Sin embargo, la diferencia es cercana a -2 puntos por lo que se podría revertir identificando los puntos más urgentes a tratar notando cambios considerables en poco tiempoo si son atendidos.
+
+# Insights
+
+* La percepción de la calidad del servicio médico prestado a los pacientes del HGZ UMF 21 tiende a ser negativa, mostrando que los pacientes encuestados tuvieron mayores expectativas del servicio en comparación a sus percepciones del mismo.
+* Aunque la percepción del servicio fue menor a la expectativa la tendencia podría ser facilmente revertida debido a que la diferencia negativa es menor a una diferencia de -2 puntos de diferencia entre expectativa y percepción.
+* Las preguntas 22, 9, 8 y 7 fueron identificadas como preguntas que se encontrarón tanto en el grupo de mayor diferencia positiva como mayor diferencia negativa. Esto indica una gran variabilidad en el tipo de respuesta de los 383 pacientes encuestados, tal que cada paciente se ubica en un espectro de satisfacción con la atención médica que a desde 1.71 hasta -1.82, dicha variabilidad indica que sólo algunos casos puntuaron tan negativamente por lo que identificarlos así como sus particularidades podría reducir considerablemente la tendencia negativa de la percepción de la satisfacción del servicio médico actual.
+
+
+# Recomendaciones
+
+* Se recomienda comenzar a atender las áreas de oportunidad relacionadas con las preguntas 22, 9, 8 y 7. Lo anterior debido a que todas estas pregntas fueron identificadas tanto como preguntas con mayor diferencia tanto negativa como positva, así se pudo inferir que la mayoria de las insatisfacciones sólo se presentaron en casos muy puntuales de la población por lo cual aerían más sencillos de atender, además de que solicionarlos no sólo incrementaría la percepción del servico sino que tambien reduciría de forma considerable la insatisfacción general con la atención médica al resolver 4 de 5 áreas de oportunidad que tuvieron la mayor diferencia negativa, rebalanciado la satisfacción general de los pacientes con el servicio médico.
+
+
