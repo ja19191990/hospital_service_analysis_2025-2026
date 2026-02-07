@@ -600,10 +600,10 @@ Por otra parte los KPIs de diferencias positivas/negativas con base en las expec
 SQL Query:
 
 ``` SQL
------------------------------------------------------------------------------------------------------------------------
--- KPI Which 5 questions had the largest average postive difference?
--- KPI ¿Cúales 5 preguntas tuvieron la mayor diferencia positiva promedio?
------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+-- KPI Which 5 questions had the largest average negative difference?
+-- KPI ¿Cúales 5 preguntas tuvieron la mayor diferencia negativa promedio?
+------------------------------------------------------------------------------------------------
 
 SELECT
     pregunta,
@@ -626,10 +626,10 @@ Output:
 SQL Query:
 
 ``` SQL
------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
 -- KPI Which 5 questions had the largest average postive difference?
 -- KPI ¿Cúales 5 preguntas tuvieron la mayor diferencia positiva promedio?
------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
 
 SELECT
     pregunta,
@@ -866,20 +866,20 @@ La distribución por rango de edad de los pacientes también cambió en función
 
 Las 22 pregruntas realizadas en las encuestas no fueron revelados para proteger los datos personales de los pacientes encuestados. A solicitud del personal médico el análisis se realizó por pregunta debido a que cada pregunta se diseño para evaluar áreas de mejora específica del servicio.
 
-¿Cuáles fueron las 5 preguntas que presentaron la mayor diferencia positiva sin importar el procedimiento?
+* ¿Cuáles fueron las 5 preguntas que presentaron la mayor diferencia positiva sin importar el procedimiento?
 
 ![output-kpi-positive_difference](assets/images/output_kpi_positive_difference.png)
 
 En orden descendente de valor de diferencia se obtuvieron las preguntas 9 > 15 > 7 > 22 > 8. Lo anterior indicó que los puntos evaluados por estas preguntas son las mayores fortalezas del servicio actual médico actual, debido a que si la diferencia es positiva es indicativo de que la percepción fue mayor a la expectativa, lo cual se puede traducir como satisfacción de los pacientes en la atención recibida.
 En general se puede observar que las diferencias positivas oscilaron entre 1.71 a 1.53 indicando una pequeña diferencia entre el valor de la percepción y expectativa, por lo que aunque con los resultados actuales la evaluación de dichas preguntas hayan sido favorables esta podría cambiar con facilidad en un futuro próximo si estas fortalezas se descuidan.
 
-¿Cuáles fueron las 5 preguntas que presentaron la mayor diferencia negativa sin importar el procedimiento?
+* ¿Cuáles fueron las 5 preguntas que presentaron la mayor diferencia negativa sin importar el procedimiento?
 
 ![output-kpi-negative_difference](assets/images/output_kpi_negative_difference.png)
 
 En orden ascendente de diferencia obtenida las preguntas fueron: 2 > 22 > 9 > 8 > 7. Las preguntas anteriores indican los puntos de mejora más urgentes a tratar para el servicio médico de medicina en el trabajo ya que un valor de diferencia negativa promedio indica una mayor valor de expectativa con respecto a la percepción del servicio médico recibido. Las diferencias se encontraron en el intervalo de -1.82 a -1.73 mostrando un intervalo con valores ligeramente mayores respecto al caso de las preguntas con diferencia positiva, lo cual señala una respuesta general de los pacientes que se inclina a la insatisfacción en el servicio recibido. Sin embargo, la diferencia es cercana a -2 puntos por lo que se podría revertir identificando los puntos más urgentes a tratar notando cambios considerables en poco tiempoo si son atendidos.
 
-¿Cúales 5 preguntas tuvieron la mayor diferencia negativa promedio en el procedimiento más solicitado?
+* ¿Cúales 5 preguntas tuvieron la mayor diferencia negativa promedio en el procedimiento más solicitado?
 
 El procedimiento más solicitado fue la _Calificación accidente de trabajo_ con el 53.26% de los casos. Al analizar las preguntas con mayor diferencia negativa de dichos pacientes se observó que las preguntas con mayor grado de insatisfacción en orden ascendente fueron: 9 < 22 < 8 < 2 < 12. Como era de esperarse al abarcar la mayoría de los casos la mayoría de las preguntas coincidieron con aquellas que se mostraron al analizar las preguntas que tuvieron la mayor diferencia negativa de forma global siendo coincidentes las preguntas: 22, 9, 8 corroborando el caraceter prioritario por atender dichos aspectos de mejora. Por otro lado las preguntas 12 y 2 podrían ser atractiva de tratar a mediano plazo porque su mejora afectaría positivamente en la percepción de más del 50% de los pacientes.
 
