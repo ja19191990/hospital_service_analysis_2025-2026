@@ -30,7 +30,11 @@
       	- [Tablas consumidas](#Tablas-consumidas)
        	- [Modelo relacional en Power BI](#Modelo-relacional-en-Power-BI)
        	- [Componentes del dashboard](#Componentes-del-dashboard)
-- [Análisis](#Análisis)     
+- [Análisis](#Análisis)
+	- [Datos demográficos](#Datos-demográficos)
+ 	- [Datos de percepción y expectativa](#Datos-de-percepción-y-expectativa)
+- [Insights](#Insights)
+- [Recomendaciones](#Recomendaciones)  
 
 # Introducción
 
@@ -842,7 +846,7 @@ El informe incluye visualizaciones enfocadas en responder preguntas de las sigui
 
 Los registros mostraron que 53.26% de los pacientes recibieron el procedimiento de _Calificación accidente de trabajo_ siendo más de la mitad del total de 383 casos. Los siguientes casos más frecuentes fueron los procedimientos _Dictamen de Invalidez_, _Dictamen incapacidad Permanente Parcial_ y _Calificación enfermedad de trabajo_ con 14.52%, 13.32% y 12.01% respectivamente de las asistencias. Mientras que los procedimientos restantes _Dictamen beneficiario incpacitado_ y _Dictamen incapcidad Permanente Total_ fueron los procedimientos menos frecuentes abarcando el 6.53% y 0.26% de los casos.
 
-![output-kpi-porcentage-count](assets/images/output_kpi_pct_count.png)
+![output-kpi-pct-by-sex](assets/images/output_kpi_pct_by_sex.png)
 
 Al analizar la distribución de ambos sexos por procedimiento se observó que:
 * La distribución de pacientes por procedimiento es muy desigual, siendo el procedimiento _Calificación accidente de trabajo_ el más solicitado con diferencia entre los encuestados abarcando más de la mitad de los casos totales de encuestados. Por otra parte el _Dictamen por incapacidad Permanente Total_ fue el menos solicitado con sólo un caso entre los encuestados.
