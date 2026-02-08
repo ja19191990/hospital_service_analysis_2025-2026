@@ -16,6 +16,10 @@ env/
 # --- Jupyter ---
 .ipynb_checkpoints/
 
+# --- Outputs generados --
+data/processed/
+data/export/
+
 # --- OS ---
 .DS_Store
 Thumbs.db
@@ -25,3 +29,4 @@ Thumbs.db
 
 # --- Logs ---
 *.log
+
