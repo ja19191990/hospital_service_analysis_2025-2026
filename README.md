@@ -12,6 +12,18 @@
         - [Boceto de dashboard](#Boceto-de-dashboard)
         - [Herramientas](#Herramientas)
         - [Flujo de trabajo](#Flujo-de-trabajo)
+- [Ejecución del proyecto](#Ejecución-del-proyecto)
+	- [1. Clonar el repositorio](#1.-Clonar-el-repositorio)
+ 	- [2. Crear entorno virtual](#2.-Crear-entorno-virtual)
+  	- [3. Instalar dependencias](#3.-Instalar-dependencias)
+  	- [4. Configurar variables del entorno](#4.-Configurar-variables-del-entorno)
+  	- [5. Ejecutar pipeline de datos](#5.-Ejecutar-pipeline-de-datos)
+  		- [Preprocesamiento (notebooks)](#Preprocesamiento-(notebooks))
+  	 	- [Carga a PostgreSQL](#Carga-a-PostgreSQL)
+  	  	- [Construcción del modelo analítico](#Construcción-del-modelo-analítico)
+  	  	- [Exportación para Power BI](#Exportación-para-Power-BI)
+  	- [6. Visualización](#6.-Visualización)
+  		- [Resultado esperado](#Resultado-esperado) 
 - [Desarrollo](#Desarrollo) 
     - [Pseudocódigo](#Pseudocódigo)
     - [Exploración de datos](#Exploración-de-datos)
@@ -185,6 +197,115 @@ El output fue el dataset _df_sql.csv_.
 6. Se generó el dashboard en Power BI usando como input las tablas _generales_ y _satisfaccion_ y las vistas finales craedas con la ejecución del SQL pipeline.
 
 ![Flujo_de_trabajo](assets/images/gif_workflow.gif)
+
+
+# Ejecución del proyecto
+
+Esta sección describe los pasos necesarios para reproducir completamente el flujo de trabajo analítico, desde los datos crudos hasta la generación del dashboard en Power BI.
+
+El proyecto fue diseñado bajo el principio de reproducibilidad end-to-end, por lo que todos los artefactos finales pueden generarse automáticamente a partir del código y los datos fuente.
+
+
+## 1. Clonar el repositorio
+
+``` bash
+git clone https://github.com/ja19191990/hospital_service_analysis_2025-2026
+cd hospital_service_analysis_2025-2026
+```
+
+## 2. Crear entorno virtual
+
+``` bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+## 3. Instalar dependencias
+
+``` bash
+pip install -r requirements.txt
+```
+
+## 4. Configurar variables del entorno
+
+Crear un archivo ```.env``` basado en ```.env.example```:
+
+``` env
+DB_USER=postgres
+DB_PASSWORD=tu_password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=encuestas_db
+```
+
+## 5. Ejecutar pipeline de datos
+
+### Preprocesamiento (notebooks)
+
+Ejecutar en orden:
+
+* EDA.ipynb
+* Preprocessing.ipynb
+
+Genera:
+
+``` bash
+data/processed/df_sql.csv
+```
+
+### Carga a PostgreSQL
+
+```bash
+python scripts/load_to_postgres.py
+```
+
+Crea la tabla base:
+
+```
+df_sql
+```
+
+### Construcción del modelo analítico
+
+``` bash
+python scripts/run_sql_pipeline.py
+```
+
+Crea automáticamente:
+* tablas normalizadas (generales, satisfaccion)
+* vistas analíticas
+* validaciones de calidad
+
+
+### Exportación para Power BI
+
+```bash
+python scripts/export_to_csv.py
+```
+
+Genera:
+```
+data/export/
+   ├── generales.csv
+   ├── satisfaccion.csv
+   └── vistas analíticas
+```
+
+## 6. Visualización
+
+Importar los archivos ```.csv``` generados en ```data/export/``` dentro de Power BI para construir el dashboard.
+
+
+### Resultado esperado
+
+Al finalizar, el usuario podrá:<br>
+✔ reconstruir la base de datos<br>
+✔ ejecutar el modelo analítico<br>
+✔ generar métricas<br>
+✔ reproducir el dashboard<br>
+
+Todo sin pasos manuales y de forma *automatizada*.
+
 
 # Desarrollo
 
